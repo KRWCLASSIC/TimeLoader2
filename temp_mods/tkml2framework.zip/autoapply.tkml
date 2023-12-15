@@ -1,0 +1,9 @@
+{
+  "mod_files": [
+    {
+      "method": "addline_top",
+      "file": "/easteregg.bat",
+      "lines_source": "test.txt"
+    }
+  ]
+}
