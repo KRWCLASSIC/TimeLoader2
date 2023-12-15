@@ -324,7 +324,40 @@ def apply_mods():
                                                 print(f"Lines added safely to {file_path} from {lines_source} successfully.")
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
-                   
+
+                            elif method == 'replace_label':
+                                file_path = mod_file.get('file')
+                                old_label_name = mod_file.get('old_label_name')
+                                label_source = mod_file.get('label_source')
+                            
+                                mod_file_path = os.path.join(mod_folder_path, 'mod_files', label_source)
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
+                            
+                                if os.path.exists(mod_file_path):
+                                    with open(mod_file_path, 'r', encoding='utf-8') as label_file:
+                                        new_label_content = label_file.read()
+                            
+                                        with open(dest_file_path, 'r', encoding='utf-8') as dest_file:
+                                            content = dest_file.read()
+                            
+                                            # Perform label replacement
+                                            label_start = content.find(f"label {old_label_name}:")
+                                            if label_start != -1:
+                                                label_end = content.find(f"label ", label_start + len(old_label_name) + 8)
+                                                if label_end == -1:
+                                                    label_end = len(content)
+                                                
+                                                # Remove the entire label block
+                                                replaced_content = content[:label_start] + new_label_content + content[label_end:]
+                                                
+                                                with open(dest_file_path, 'w', encoding='utf-8') as dest_file_write:
+                                                    dest_file_write.write(replaced_content)
+                                                    print(f"Label {old_label_name} replaced successfully in {file_path} from {label_source}.")
+                                            else:
+                                                print(f"Label {old_label_name} not found in {file_path}.")
+                                else:
+                                    print(f"Label source file {label_source} not found for {mod_folder}.")
+
                 except json.JSONDecodeError as e:
                     print(f"Error decoding autoapply.tkml in {mod_folder}: {e}")
         else:

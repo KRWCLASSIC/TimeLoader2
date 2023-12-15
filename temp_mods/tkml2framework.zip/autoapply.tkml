@@ -1,0 +1,10 @@
+{
+  "mod_files": [
+    {
+      "method": "replace_label",
+      "file": "/game/scripts/act1.rpy",
+      "old_label_name": "crash",
+      "label_source": "test.txt"
+    }
+  ]
+}
