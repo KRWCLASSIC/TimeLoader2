@@ -296,6 +296,35 @@ def apply_mods():
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
                             
+                            elif method == 'addline_safe':
+                                lines_source = mod_file.get('lines_source')
+                                mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
+
+                                if os.path.exists(mod_file_path):
+                                    with open(mod_file_path, 'r') as lines_file:
+                                        lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
+
+                                        with open(dest_file_path, 'r+') as dest_file:
+                                            content = dest_file.readlines()
+                                            label_found = False
+
+                                            for index, line in enumerate(content):
+                                                if line.strip().startswith("label"):
+                                                    content.insert(index, lines_to_add)
+                                                    label_found = True
+                                                    break
+                                                
+                                            if not label_found:
+                                                print("Label not found. The code was not added.")
+                                            else:
+                                                dest_file.seek(0)
+                                                dest_file.truncate()
+                                                dest_file.write("".join(content))
+                                                print(f"Lines added safely to {file_path} from {lines_source} successfully.")
+                                else:
+                                    print(f"Lines source file {lines_source} not found for {mod_folder}.")
+                   
                 except json.JSONDecodeError as e:
                     print(f"Error decoding autoapply.tkml in {mod_folder}: {e}")
         else:
