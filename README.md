@@ -1,7 +1,8 @@
 # TimeLoader2
 
-Windows Mod Loader for [Time Keeper](https://gamejolt.com/games/TimeKeeper/771919) by neskuk22
-early aces
+Windows Mod Loader for [Time Keeper](https://gamejolt.com/games/TimeKeeper/771919) by neskuk22.
+
+erli aces 
 
 # Mod Format
 
