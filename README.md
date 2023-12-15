@@ -64,7 +64,7 @@ mod_name.zip/
 #### Fields:
 - `method`: The method of modification (`addline_bottom`, `addline_top`, `replace_label`, etc.).
 - `file`: Path to the target file within the game directory.
-- `lines_source` or `label_source`: Name of the file (Path if file is in the folder inside of the mod_files folder) containing lines or label content to add or replace.
+- `lines_source` or `label_source`: Name of the file (Path if file is in the folder inside of the mod_files folder) containing lines or entire label to add or replace.
 - `old_label_name` (for `replace_label`): Name of the label to be replaced.
 
 ### Usage
