@@ -157,3 +157,19 @@ mod_name.zip/
     "file": "/game/scripts/act1.rpy",
   }
   ```
+
+#### `replace_line`
+- **Description**: Replaces a specific line within a file with a new line of content.
+- **Parameters**:
+  - `file`: Path to the file where the line will be replaced.
+  - `line`: The exact line to be replaced within the specified file.
+  - `replacement_line`: The line that will replace the specified `line`.
+- **Usage**:
+  ```json
+  {
+    "method": "replace_line",
+    "file": "/game/options.rpy",
+    "line": "Line you want to override",
+    "replacement_line": "Line that will be in place of original one"
+  }
+  ```

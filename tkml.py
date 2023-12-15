@@ -14,6 +14,13 @@ def press_enter_to_continue():
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+def clean_start():
+    directory_name = "temp_mods"
+    try:
+        shutil.rmtree(directory_name, ignore_errors=True)
+    except Exception:
+        pass
+
 def load_game(game_path):
     clear_screen()
     
@@ -53,7 +60,8 @@ def show_mod_list():
                     mod_data = json.load(meta_file)
                     print(f"\tName: {mod_data.get('mod_name', 'Unknown')}")
                     print(f"\tAuthor: {mod_data.get('author', 'Unknown')}")
-                    print(f"\tVersion: {'Universal' if mod_data.get('version') == 'tkml2_frame' else mod_data.get('version', 'Unknown')}")
+                    print(f"\tMod Version: {mod_data['mod_version']}")
+                    print(f"\tGame Version: {'Universal' if mod_data['version'] == 'tkml2_frame' else mod_data['version']}")
                     print(f"\tDescription: {mod_data.get('description', 'No description available')}")
                     dependencies = mod_data.get('dependencies')
                     if dependencies:
@@ -104,7 +112,8 @@ def display_mod_info():
                 print(f"Mod: {mod_folder}\n")
                 print(f"\tName: {mod_data['mod_name']}")
                 print(f"\tAuthor: {mod_data['author']}")
-                print(f"\tVersion: {'Universal' if mod_data['version'] == 'tkml2_frame' else mod_data['version']}")
+                print(f"\tMod Version: {mod_data['mod_version']}")
+                print(f"\tGame Version: {'Universal' if mod_data['version'] == 'tkml2_frame' else mod_data['version']}")
                 print(f"\tDescription: {mod_data['description']}")
                 if mod_data.get('dependencies'):
                     print(f"\tDependencies:")
@@ -220,20 +229,24 @@ def create_modded_instance():
     if os.path.exists(modded_game_path):
         try:
             shutil.rmtree(modded_game_path)
-            print("Existing modded game folder removed.")
+            print("Existing modded game instance removed.")
         except Exception as e:
             print(f"Error removing existing modded game folder: {e}")
             press_enter_to_continue()
+            pass
 
     try:
         shutil.copytree(base_game_path, modded_game_path)
-        print("Base game copied to modded game successfully.")
+        print("Modded instance of a game created.")
     except FileNotFoundError:
         print("Base game folder not found.")
         press_enter_to_continue()
+        pass
     except Exception as e:
         print(f"An error occurred: {e}")
         press_enter_to_continue()
+        pass
+    waitfunc()
     waitfunc()
     clear_screen()
 
@@ -270,11 +283,11 @@ def apply_mods():
                                 lines_source = mod_file.get('lines_source')
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
                                 dest_file_path = os.path.join(modded_game_directory, file_path[1:])
-                            
+
                                 if os.path.exists(mod_file_path):
-                                    with open(mod_file_path, 'r') as lines_file:
+                                    with open(mod_file_path, 'r', encoding='utf-8') as lines_file:
                                         lines_to_add = '\n' + lines_file.read().strip()  # Adding newline before content
-                                        with open(dest_file_path, 'a') as dest_file:
+                                        with open(dest_file_path, 'a', encoding='utf-8') as dest_file:
                                             dest_file.write(lines_to_add)
                                             print(f"Lines added to {file_path} from {lines_source} successfully.")
                                 else:
@@ -286,23 +299,23 @@ def apply_mods():
                                 dest_file_path = os.path.join(modded_game_directory, file_path[1:])
 
                                 if os.path.exists(mod_file_path):
-                                    with open(mod_file_path, 'r') as lines_file:
+                                    with open(mod_file_path, 'r', encoding='utf-8-sig') as lines_file:
                                         lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
-                                        with open(dest_file_path, 'r+') as dest_file:
+                                        with open(dest_file_path, 'r+', encoding='utf-8-sig') as dest_file:
                                             content = dest_file.read()
                                             dest_file.seek(0, 0)  # Move to the beginning of the file
                                             dest_file.write(lines_to_add + content)
                                             print(f"Lines added to the top of {file_path} from {lines_source} successfully.")
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
-                            
+
                             elif method == 'addline_safe':
                                 lines_source = mod_file.get('lines_source')
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
                                 dest_file_path = os.path.join(modded_game_directory, file_path[1:])
 
                                 if os.path.exists(mod_file_path):
-                                    with open(mod_file_path, 'r') as lines_file:
+                                    with open(mod_file_path, 'r', encoding='utf-8') as lines_file:
                                         lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
 
                                         with open(dest_file_path, 'r+', encoding='utf-8') as dest_file:
@@ -324,6 +337,7 @@ def apply_mods():
                                                 print(f"Lines added safely to {file_path} from {lines_source} successfully.")
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
+
 
                             elif method == 'replace_label':
                                 file_path = mod_file.get('file')
@@ -357,11 +371,39 @@ def apply_mods():
                                                 print(f"Label {old_label_name} not found in {file_path}.")
                                 else:
                                     print(f"Label source file {label_source} not found for {mod_folder}.")
+                            elif method == 'replace_line':
+                                file_path = mod_file.get('file')
+                                line_to_replace = mod_file.get('line')
+                                replacement_line = mod_file.get('replacement_line')
+
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
+
+                                if os.path.exists(dest_file_path):
+                                    with open(dest_file_path, 'r', encoding='utf-8') as dest_file:
+                                        content = dest_file.readlines()
+
+                                        line_found = False
+                                        for index, line in enumerate(content):
+                                            if line.strip() == line_to_replace:
+                                                content[index] = replacement_line + '\n'  # Replace the line
+
+                                                with open(dest_file_path, 'w', encoding='utf-8') as dest_file_write:
+                                                    dest_file_write.write(''.join(content))
+                                                    print(f"Line replaced successfully in {file_path}.")
+                                                line_found = True
+                                                break
+                                            
+                                        if not line_found:
+                                            print(f"Line '{line_to_replace}' not found in {file_path}.")
+                                else:
+                                    print(f"File {file_path} not found.")
 
                 except json.JSONDecodeError as e:
                     print(f"Error decoding autoapply.tkml in {mod_folder}: {e}")
         else:
             print(f"No autoapply.tkml found in {mod_folder} or it's not a valid mod folder.")
+    waitfunc()
+    waitfunc()
 
 def clear_log_file():
     log_path = os.path.join("modded_game", "log.txt")
@@ -423,9 +465,10 @@ def live_debugger():
     else:
         print("Log file not found.")
 
-ver = "0.0.1"  # Update the version number
+ver = "0.0.2"  # Update the version number
 
 while True:
+    clean_start()
     clear_screen()
     print("\nTimeLoader2")
     print(f"Version {ver}")
@@ -433,7 +476,7 @@ while True:
     print("1) Load Base Game")
     print("2) Load Modded Game")
     print("3) Mod List")
-    print("4) Build and Run Modded Game")
+    print("4) Build Modded Game")
     print("5) Run Modded Game in Debug Mode")
 
     option = input("Option: ")
@@ -453,7 +496,6 @@ while True:
         display_mod_info()
         create_modded_instance()
         apply_mods()
-        load_game("modded_game")
     elif option == '5':
         clear_log_file()
         load_game("modded_game")

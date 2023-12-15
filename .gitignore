@@ -1,1 +1,7 @@
 README.md
+/basegame/*
+!/basegame/here goes timekeeper base game FILES (not game folder)/
+
+/modded_game/*
+
+/temp_mods/*
