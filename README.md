@@ -53,8 +53,8 @@ mod_name.zip/
   "mod_files": [
     {
       "method": "addline_bottom",
-      "file": "/game/options.rpy",
-      "lines_source": "options-bottom.rpy"
+      "file": "/game/scripts/act1.rpy",
+      "lines_source": "test.txt"
     },
     {
       "method": "replace_label",
@@ -64,7 +64,7 @@ mod_name.zip/
     },
     {
       "method": "addline_top",
-      "file": "/easteregg.bat",
+      "file": "/game/scripts/act1.rpy",
       "lines_source": "test.txt"
     }
   ]
@@ -96,8 +96,8 @@ mod_name.zip/
   ```json
   {
     "method": "addline_bottom",
-    "file": "/game/options.rpy",
-    "lines_source": "options-bottom.rpy"
+    "file": "/game/scripts/act1.rpy",
+    "lines_source": "test.txt"
   }
   ```
 
