@@ -80,10 +80,11 @@ mod_name.zip/
 
 ### Usage
 
-1. Create a directory for your mod.
+1. Create a working directory for your mod.
 2. Add `modmeta.tkml` with mod details.
 3. Include mod files in the `mod_files` directory.
 4. Define modifications in `autoapply.tkml`.
+5. Archive all of the files into a zip.
 
 # Code Injection Methods
 
