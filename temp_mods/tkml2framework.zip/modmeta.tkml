@@ -1,8 +1,0 @@
-{
-    "mod_name": "TKML2 Framework",
-    "author": "KRW CLASSIC",
-    "version": "tkml2_frame",
-    "mod_id": "krw.tkml2.framework",
-    "description": "Debug framework for working with mod creation",
-    "dependencies": []
-}
