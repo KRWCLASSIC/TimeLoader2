@@ -305,7 +305,7 @@ def apply_mods():
                                     with open(mod_file_path, 'r') as lines_file:
                                         lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
 
-                                        with open(dest_file_path, 'r+') as dest_file:
+                                        with open(dest_file_path, 'r+', encoding='utf-8') as dest_file:
                                             content = dest_file.readlines()
                                             label_found = False
 
