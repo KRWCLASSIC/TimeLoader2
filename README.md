@@ -45,18 +45,18 @@ mod_name.zip/
   {
     "method": "addline_bottom",
     "file": "/game/options.rpy",
-    "lines_source": "mod_files/options-bottom.rpy"
+    "lines_source": "options-bottom.rpy"
   },
   {
     "method": "replace_label",
     "file": "/game/scripts/act1.rpy",
     "old_label_name": "crash",
-    "label_source": "mod_files/test.txt"
+    "label_source": "test.txt"
   },
   {
     "method": "addline_top",
     "file": "/easteregg.bat",
-    "lines_source": "mod_files/test.txt"
+    "lines_source": "test.txt"
   }
 ]
 ```
@@ -64,7 +64,7 @@ mod_name.zip/
 #### Fields:
 - `method`: The method of modification (`addline_bottom`, `addline_top`, `replace_label`, etc.).
 - `file`: Path to the target file within the game directory.
-- `lines_source` or `label_source`: Path to the file containing lines or label content to add or replace.
+- `lines_source` or `label_source`: Name of the file (Path if file is in the folder inside of the mod_files folder) containing lines or label content to add or replace.
 - `old_label_name` (for `replace_label`): Name of the label to be replaced.
 
 ### Usage
