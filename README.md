@@ -99,7 +99,7 @@ mod_name.zip/
   ```json
   {
     "method": "addline_top",
-    "file": "/easteregg.bat",
+    "file": "/game/scripts/act1.rpy",
     "lines_source": "test.txt"
   }
   ```
@@ -113,7 +113,7 @@ mod_name.zip/
   ```json
   {
     "method": "addline_safe",
-    "file": "/easteregg.bat",
+    "file": "/game/scripts/act1.rpy",
     "lines_source": "test.txt"
   }
   ```
