@@ -152,8 +152,8 @@ Certainly! Here's the updated documentation to include the `"replace"` method:
 #### `replace`
 - **Description**: Replaces or adds specific files.
 - **Parameters**:
-  - `file`: Path to the file where content will be replaced.
-  - `source_file`: File containing the replacement content.
+  - `file`: Path to the file where content will be replaced or added.
+  - `source_file`: Replacement or new file.
 - **Usage**:
   ```json
   {
