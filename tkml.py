@@ -22,7 +22,7 @@ def load_game(game_path):
             print("Modded game found. Starting the game...")
             os.system(f"start {game_path}\\TimeKeeper.exe")
         else:
-            print("Modded game not found. Please install mods first.")
+            print("Modded game not found. Please run and build modded game first.")
     else:
         print(f"Starting the {game_path}...")
         os.system(f"start {game_path}\\TimeKeeper.exe")
@@ -363,6 +363,66 @@ def apply_mods():
         else:
             print(f"No autoapply.tkml found in {mod_folder} or it's not a valid mod folder.")
 
+def clear_log_file():
+    log_path = os.path.join("modded_game", "log.txt")
+    if os.path.exists(log_path):
+        try:
+            os.remove(log_path)  # Remove the existing log file
+            with open(log_path, 'w'):  # Create a new empty log file
+                pass
+            print("Log file cleared.")
+        except Exception as e:
+            print(f"Error clearing log file: {e}")
+    else:
+        print("Log file not found.")
+
+def wait_for_timekeeper():
+    attempts = 0
+
+    while True:
+        try:
+            output = subprocess.check_output(["tasklist", "/FI", "IMAGENAME eq Timekeeper.exe"])
+            decoded_output = output.decode("utf-8", errors="replace")  # Using 'replace' for handling decoding errors
+            process_started = "Timekeeper.exe" in decoded_output
+
+            if process_started:
+                print("TimeKeeper.exe process detected!")
+                break  # Exit the loop once the process is found
+            else:
+                attempts += 1
+                print(f"Attempt {attempts} failed: Process not found")
+        except subprocess.CalledProcessError as e:
+            attempts += 1
+            print(f"Attempt {attempts} failed: {e}")
+
+        time.sleep(0.5)  # Check every 0.5 seconds
+
+def check_timekeeper():
+    try:
+        output = subprocess.check_output(["tasklist", "/FI", "IMAGENAME eq Timekeeper.exe"])
+        decoded_output = output.decode("utf-8", errors="replace")
+        process_started = "Timekeeper.exe" in decoded_output
+        return process_started
+    except subprocess.CalledProcessError as e:
+        print(f"Error checking for Timekeeper.exe: {e}")
+        return False
+
+def live_debugger():
+    log_path = os.path.join("modded_game", "log.txt")
+    if os.path.exists(log_path):
+        try:
+            with open(log_path, 'r') as log_file:
+                while check_timekeeper():  # Check for Timekeeper.exe process
+                    lines = log_file.readlines()  # Read all available lines
+                    for line in lines:
+                        print(line, end='')
+
+                    time.sleep(0.1)  # Introduce a small delay before reading again
+        except Exception as e:
+            print(f"Error reading log file: {e}")
+    else:
+        print("Log file not found.")
+
 ver = "0.0.1"  # Update the version number
 
 while True:
@@ -395,4 +455,7 @@ while True:
         apply_mods()
         load_game("modded_game")
     elif option == '5':
-        pass
+        clear_log_file()
+        load_game("modded_game")
+        wait_for_timekeeper()
+        live_debugger()
