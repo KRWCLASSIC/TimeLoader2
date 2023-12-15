@@ -434,7 +434,7 @@ while True:
     print("2) Load Modded Game")
     print("3) Mod List")
     print("4) Build and Run Modded Game")
-    print("5) Run in Debug Mode")
+    print("5) Run Modded Game in Debug Mode")
 
     option = input("Option: ")
 
