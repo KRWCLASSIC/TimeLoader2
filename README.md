@@ -49,24 +49,27 @@ mod_name.zip/
 
 #### Example:
 ```json
-[
-  {
-    "method": "addline_bottom",
-    "file": "/game/options.rpy",
-    "lines_source": "options-bottom.rpy"
-  },
-  {
-    "method": "replace_label",
-    "file": "/game/scripts/act1.rpy",
-    "old_label_name": "crash",
-    "label_source": "test.txt"
-  },
-  {
-    "method": "addline_top",
-    "file": "/easteregg.bat",
-    "lines_source": "test.txt"
-  }
-]
+{
+  "mod_files": [
+    {
+      "method": "addline_bottom",
+      "file": "/game/options.rpy",
+      "lines_source": "options-bottom.rpy"
+    },
+    {
+      "method": "replace_label",
+      "file": "/game/scripts/act1.rpy",
+      "old_label_name": "crash",
+      "label_source": "test.txt"
+    },
+    {
+      "method": "addline_top",
+      "file": "/easteregg.bat",
+      "lines_source": "test.txt"
+    }
+  ]
+}
+
 ```
 
 #### Fields:
