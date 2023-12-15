@@ -74,7 +74,7 @@ mod_name.zip/
 3. Include mod files in the `mod_files` directory.
 4. Define modifications in `autoapply.tkml`.
 
-# Code Injecting Methods
+# Code Injection Methods
 
 #### `addline_bottom`
 - **Description**: Adds lines of code at the bottom of a specified file.
