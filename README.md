@@ -86,6 +86,9 @@ mod_name.zip/
 4. Define modifications in `autoapply.tkml`.
 5. Archive all of the files into a zip.
 
+Certainly! Here's the updated documentation to include the `"replace"` method:
+
+```markdown
 # Code Injection Methods
 
 #### `addline_bottom`
@@ -143,5 +146,19 @@ mod_name.zip/
     "file": "/game/scripts/act1.rpy",
     "old_label_name": "crash",
     "label_source": "test.txt"
+  }
+  ```
+
+#### `replace`
+- **Description**: Replaces or adds specific files.
+- **Parameters**:
+  - `file`: Path to the file where content will be replaced.
+  - `source_file`: File containing the replacement content.
+- **Usage**:
+  ```json
+  {
+    "method": "replace",
+    "file": "/game/scripts/act1.rpy",
+    "source_file": "test.txt"
   }
   ```
