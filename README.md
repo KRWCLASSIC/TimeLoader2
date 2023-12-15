@@ -86,9 +86,6 @@ mod_name.zip/
 4. Define modifications in `autoapply.tkml`.
 5. Archive all of the files into a zip.
 
-Certainly! Here's the updated documentation to include the `"replace"` method:
-
-```markdown
 # Code Injection Methods
 
 #### `addline_bottom`
