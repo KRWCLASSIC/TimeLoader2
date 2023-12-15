@@ -152,13 +152,11 @@ Certainly! Here's the updated documentation to include the `"replace"` method:
 #### `replace`
 - **Description**: Replaces or adds specific files.
 - **Parameters**:
-  - `file`: Path to the file where content will be replaced or added.
-  - `source_file`: Replacement or new file.
+  - `file`: Path to the file where content will be replaced or added. Source file doesn't need to be specified because it will get the file with the same name.
 - **Usage**:
   ```json
   {
     "method": "replace",
     "file": "/game/scripts/act1.rpy",
-    "source_file": "test.txt"
   }
   ```
