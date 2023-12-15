@@ -8,6 +8,8 @@ erli aces
 
 You can manually install base game from [GameJolt page](https://gamejolt.com/games/TimeKeeper/771919) or [Time Keeper Archive](https://github.com/KRWCLASSIC/Time-Keeper-Archive) GitHub repository.
 
+Auto Game Updater uses GitHub archive because GameJolt doesn't have any useful API.
+
 # Mod Format
 
 A typical mod might have the following structure:
