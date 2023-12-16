@@ -33,6 +33,7 @@ mod_name.zip/
   "mod_name": "Sample Mod",
   "author": "Your Name",
   "version": "1.0",
+  "mod_version": "1.0",
   "mod_id": "test.example.modID",
   "description": "A sample mod demonstrating various functionalities."
 }
@@ -41,7 +42,8 @@ mod_name.zip/
 #### Fields:
 - `mod_name`: The name of the mod.
 - `author`: Author's name or username.
-- `version`: Version of the mod.
+- `version`: Version of the game it should be ran on.
+- `mod_version`: Version of the mod.
 - `mod_id`: Mod ID for identification.
 - `description`: Brief description of the mod's purpose or changes.
 
