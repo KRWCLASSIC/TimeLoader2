@@ -4,6 +4,7 @@ import shutil
 import time
 import json
 import sys
+from colorama import init, Fore, Style
 
 def waitfunc():
     time.sleep(1)
@@ -465,21 +466,37 @@ def live_debugger():
     else:
         print("Log file not found.")
 
+def print_center(text):
+    terminal_width = os.get_terminal_size().columns
+    lines = text.split('\n')
+    for line in lines:
+        print(line.center(terminal_width))
+
 ver = "0.0.2"  # Update the version number
+
+init()
+
+ascii_art = (
+    "░▀▀█▀▀░░▀░░█▀▄▀█░█▀▀░▒█░░░░▄▀▀▄░█▀▀▄░█▀▄░█▀▀░█▀▀▄░█▀█\n"
+    "░░▒█░░░░█▀░█░▀░█░█▀▀░▒█░░░░█░░█░█▄▄█░█░█░█▀▀░█▄▄▀░▒▄▀\n"
+    "░░▒█░░░▀▀▀░▀░░▒▀░▀▀▀░▒█▄▄█░░▀▀░░▀░░▀░▀▀░░▀▀▀░▀░▀▀░█▄▄"
+)
 
 while True:
     clean_start()
     clear_screen()
-    print("\nTimeLoader2")
-    print(f"Version {ver}")
-    print("by KRWCLASSIC\n")
+    print(Fore.LIGHTRED_EX)
+    print_center(ascii_art)
+    print(Style.RESET_ALL)
+    print(Fore.YELLOW + f"Version {ver}".center(os.get_terminal_size().columns))
+    print(Fore.LIGHTYELLOW_EX + "by KRWCLASSIC".center(os.get_terminal_size().columns) + Style.RESET_ALL + "\n")
     print("1) Load Base Game")
     print("2) Load Modded Game")
     print("3) Mod List")
     print("4) Build Modded Game")
     print("5) Run Modded Game in Debug Mode")
 
-    option = input("Option: ")
+    option = input("   Option: ")
 
     if option == '1':
         load_game("basegame")
