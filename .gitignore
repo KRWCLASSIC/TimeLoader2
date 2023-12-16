@@ -1,7 +1,8 @@
-README.md
 /basegame/*
 !/basegame/here goes timekeeper base game FILES (not game folder)/
 /modded_game/*
 /temp_mods/*
 Run TKML2.cmd
 /mods/tkml2framework/
+/mods/build framework.py
+/mods/build framework.bat
