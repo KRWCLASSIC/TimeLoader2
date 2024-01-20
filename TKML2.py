@@ -38,7 +38,6 @@ def load_game(game_path):
     waitfunc()
     clear_screen()
 
-
 def show_mod_list():
     clear_screen()
     temp_directory = "temp_mods"
