@@ -80,18 +80,15 @@ def check_modded_game_folder():
 
 def extract_mods():
     clear_screen()
-    mods_directory = "mods"  # Replace with your mods directory
-    temp_directory = "temp_mods"  # Temporary directory to extract mods
+    mods_directory = "mods"
+    temp_directory = "temp_mods" 
 
-    # Remove the temporary directory if it exists
     if os.path.exists(temp_directory):
         shutil.rmtree(temp_directory)
 
-    # Create a temporary directory if it doesn't exist
     if not os.path.exists(temp_directory):
         os.makedirs(temp_directory)
 
-    # Extract mods into the temporary directory
     for mod in os.listdir(mods_directory):
         mod_path = os.path.join(mods_directory, mod)
         if mod.endswith('.zip'):
@@ -120,7 +117,7 @@ def display_mod_info():
                     print(f"\tDependencies:")
                     for dependency in mod_data['dependencies']:
                         print(f"\t\t{dependency}")
-                if index != len(mods):  # Add a separator after each mod (except the last)
+                if index != len(mods):
                     print("\n====================================================\n")
             metadata_found = True
 
@@ -223,10 +220,9 @@ def check_mod_files():
 def create_modded_instance():
     clear_screen()
     print("Creating modded instance of a game.")
-    base_game_path = "basegame"  # Assuming the "basegame" folder is in the current directory
-    modded_game_path = "modded_game"  # Destination for the modded game folder
+    base_game_path = "basegame"
+    modded_game_path = "modded_game"
 
-    # Remove existing modded_game folder if it exists
     if os.path.exists(modded_game_path):
         try:
             shutil.rmtree(modded_game_path)
@@ -272,7 +268,7 @@ def apply_mods():
 
                             if method == 'replace':
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', os.path.basename(file_path))
-                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])  # Removing the leading '/'
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
 
                                 if os.path.exists(mod_file_path):
                                     shutil.copyfile(mod_file_path, dest_file_path)
@@ -283,14 +279,14 @@ def apply_mods():
                             elif method == 'addline_bottom':
                                 lines_source = mod_file.get('lines_source')
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
-                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])  # Removing the leading '/'
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
 
                                 if os.path.exists(mod_file_path):
                                     with open(mod_file_path, 'r', encoding='utf-8') as lines_file:
-                                        lines_to_add = lines_file.read()  # Read the entire content of the source file
+                                        lines_to_add = lines_file.read()
 
                                         with open(dest_file_path, 'a', encoding='utf-8') as dest_file:
-                                            dest_file.write('\n' + lines_to_add)  # Add a newline before appending the content
+                                            dest_file.write('\n' + lines_to_add)
                                             print(f"Lines added to {file_path} from {lines_source} successfully.")
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
@@ -302,10 +298,10 @@ def apply_mods():
 
                                 if os.path.exists(mod_file_path):
                                     with open(mod_file_path, 'r', encoding='utf-8-sig') as lines_file:
-                                        lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
+                                        lines_to_add = lines_file.read().strip() + '\n'
                                         with open(dest_file_path, 'r+', encoding='utf-8-sig') as dest_file:
                                             content = dest_file.read()
-                                            dest_file.seek(0, 0)  # Move to the beginning of the file
+                                            dest_file.seek(0, 0)
                                             dest_file.write(lines_to_add + content)
                                             print(f"Lines added to the top of {file_path} from {lines_source} successfully.")
                                 else:
@@ -318,7 +314,7 @@ def apply_mods():
 
                                 if os.path.exists(mod_file_path):
                                     with open(mod_file_path, 'r', encoding='utf-8') as lines_file:
-                                        lines_to_add = lines_file.read().strip() + '\n'  # Adding newline at the end
+                                        lines_to_add = lines_file.read().strip() + '\n'
 
                                         with open(dest_file_path, 'r+', encoding='utf-8') as dest_file:
                                             content = dest_file.readlines()
@@ -356,14 +352,12 @@ def apply_mods():
                                         with open(dest_file_path, 'r', encoding='utf-8') as dest_file:
                                             content = dest_file.read()
                             
-                                            # Perform label replacement
                                             label_start = content.find(f"label {old_label_name}:")
                                             if label_start != -1:
                                                 label_end = content.find(f"label ", label_start + len(old_label_name) + 8)
                                                 if label_end == -1:
                                                     label_end = len(content)
                                                 
-                                                # Remove the entire label block
                                                 replaced_content = content[:label_start] + new_label_content + content[label_end:]
                                                 
                                                 with open(dest_file_path, 'w', encoding='utf-8') as dest_file_write:
@@ -387,7 +381,7 @@ def apply_mods():
                                         line_found = False
                                         for index, line in enumerate(content):
                                             if line.strip() == line_to_replace:
-                                                content[index] = replacement_line + '\n'  # Replace the line
+                                                content[index] = replacement_line + '\n'
 
                                                 with open(dest_file_path, 'w', encoding='utf-8') as dest_file_write:
                                                     dest_file_write.write(''.join(content))
@@ -411,8 +405,8 @@ def clear_log_file():
     log_path = os.path.join("modded_game", "log.txt")
     if os.path.exists(log_path):
         try:
-            os.remove(log_path)  # Remove the existing log file
-            with open(log_path, 'w'):  # Create a new empty log file
+            os.remove(log_path)
+            with open(log_path, 'w'):
                 pass
             print("Log file cleared.")
         except Exception as e:
@@ -426,12 +420,12 @@ def wait_for_timekeeper():
     while True:
         try:
             output = subprocess.check_output(["tasklist", "/FI", "IMAGENAME eq Timekeeper.exe"])
-            decoded_output = output.decode("utf-8", errors="replace")  # Using 'replace' for handling decoding errors
+            decoded_output = output.decode("utf-8", errors="replace")
             process_started = "Timekeeper.exe" in decoded_output
 
             if process_started:
                 print("TimeKeeper.exe process detected!")
-                break  # Exit the loop once the process is found
+                break
             else:
                 attempts += 1
                 print(f"Attempt {attempts} failed: Process not found")
@@ -439,7 +433,7 @@ def wait_for_timekeeper():
             attempts += 1
             print(f"Attempt {attempts} failed: {e}")
 
-        time.sleep(0.5)  # Check every 0.5 seconds
+        time.sleep(0.5)
 
 def check_timekeeper():
     try:
@@ -456,12 +450,12 @@ def live_debugger():
     if os.path.exists(log_path):
         try:
             with open(log_path, 'r') as log_file:
-                while check_timekeeper():  # Check for Timekeeper.exe process
-                    lines = log_file.readlines()  # Read all available lines
+                while check_timekeeper():
+                    lines = log_file.readlines()
                     for line in lines:
                         print(line, end='')
 
-                    time.sleep(0.1)  # Introduce a small delay before reading again
+                    time.sleep(0.1)
         except Exception as e:
             print(f"Error reading log file: {e}")
     else:
