@@ -156,7 +156,7 @@ mod_name.zip/
   ```json
   {
     "method": "replace",
-    "file": "/game/scripts/act1.rpy",
+    "file": "/game/scripts/act1.rpy"
   }
   ```
 

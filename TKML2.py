@@ -283,17 +283,18 @@ def apply_mods():
                             elif method == 'addline_bottom':
                                 lines_source = mod_file.get('lines_source')
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
-                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])
+                                dest_file_path = os.path.join(modded_game_directory, file_path[1:])  # Removing the leading '/'
 
                                 if os.path.exists(mod_file_path):
                                     with open(mod_file_path, 'r', encoding='utf-8') as lines_file:
-                                        lines_to_add = '\n' + lines_file.read().strip()  # Adding newline before content
+                                        lines_to_add = lines_file.read()  # Read the entire content of the source file
+
                                         with open(dest_file_path, 'a', encoding='utf-8') as dest_file:
-                                            dest_file.write(lines_to_add)
+                                            dest_file.write('\n' + lines_to_add)  # Add a newline before appending the content
                                             print(f"Lines added to {file_path} from {lines_source} successfully.")
                                 else:
                                     print(f"Lines source file {lines_source} not found for {mod_folder}.")
-
+                            
                             elif method == 'addline_top':
                                 lines_source = mod_file.get('lines_source')
                                 mod_file_path = os.path.join(mod_folder_path, 'mod_files', lines_source)
@@ -477,9 +478,9 @@ ver = "0.0.2"  # Update the version number
 init()
 
 ascii_art = (
-    "░▀▀█▀▀░░▀░░█▀▄▀█░█▀▀░▒█░░░░▄▀▀▄░█▀▀▄░█▀▄░█▀▀░█▀▀▄░█▀█\n"
-    "░░▒█░░░░█▀░█░▀░█░█▀▀░▒█░░░░█░░█░█▄▄█░█░█░█▀▀░█▄▄▀░▒▄▀\n"
-    "░░▒█░░░▀▀▀░▀░░▒▀░▀▀▀░▒█▄▄█░░▀▀░░▀░░▀░▀▀░░▀▀▀░▀░▀▀░█▄▄"
+    " ▀▀█▀▀ ▀  █▀▄▀█ █▀▀  █    ▄▀▀▄ ▄▀▀▄ █▀▀▄ █▀▀ █▀▀▄ █▀█\n"
+    "   █   █▀ █ ▀ █ █▀▀  █  ▄ █  █ █▄▄█ █  █ █▀▀ █▄▄▀  ▄▀\n"
+    "   █  ▀▀▀ ▀   ▀ ▀▀▀  ▀▀▀▀  ▀▀  ▀  ▀ ▀▀▀  ▀▀▀ ▀ ▀▀ █▄▄"
 )
 
 while True:
@@ -495,6 +496,7 @@ while True:
     print("3) Mod List")
     print("4) Build Modded Game")
     print("5) Run Modded Game in Debug Mode")
+    print("6) Update and Download Time Keeper")
 
     option = input("   Option: ")
 
@@ -518,3 +520,5 @@ while True:
         load_game("modded_game")
         wait_for_timekeeper()
         live_debugger()
+    elif option == '6':
+        pass
