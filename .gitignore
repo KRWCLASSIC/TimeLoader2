@@ -10,3 +10,4 @@ Run TKML2.cmd
 /mods/build sexkeeper.py
 /mods/build sexkeeper.bat
 sexkeeper.zip
+.gitignore
