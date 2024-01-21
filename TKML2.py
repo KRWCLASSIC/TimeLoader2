@@ -1,9 +1,10 @@
-import os
 import subprocess
+import requests
 import shutil
 import time
 import json
 import sys
+import os
 from colorama import init, Fore, Style
 
 def waitfunc():
@@ -16,11 +17,11 @@ def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def clean_start():
-    directory_name = "temp_mods"
-    try:
-        shutil.rmtree(directory_name, ignore_errors=True)
-    except Exception:
-        pass
+    for directory_name in ["temp_mods", "temp"]:
+        try:
+            shutil.rmtree(directory_name, ignore_errors=True)
+        except Exception:
+            pass
 
 def load_game(game_path):
     clear_screen()
@@ -28,12 +29,14 @@ def load_game(game_path):
     if game_path == "modded_game":
         if check_modded_game_folder():
             print("Modded game found. Starting the game...")
-            os.system(f"start {game_path}\\TimeKeeper.exe")
+            os.system(f"start {game_path.lower()}\\TimeKeeper.exe")
+
         else:
             print("Modded game not found. Please run and build modded game first.")
     else:
         print(f"Starting the {game_path}...")
-        os.system(f"start {game_path}\\TimeKeeper.exe")
+        os.system(f"start {game_path.lower()}\\TimeKeeper.exe")
+
 
     waitfunc()
     clear_screen()
@@ -436,7 +439,7 @@ def wait_for_timekeeper():
 
 def check_timekeeper():
     try:
-        output = subprocess.check_output(["tasklist", "/FI", "IMAGENAME eq Timekeeper.exe"])
+        output = subprocess.check_output(["tasklist", "/FI", "IMAGENAME eq /C Timekeeper.exe"])
         decoded_output = output.decode("utf-8", errors="replace")
         process_started = "Timekeeper.exe" in decoded_output
         return process_started
@@ -460,15 +463,145 @@ def live_debugger():
     else:
         print("Log file not found.")
 
+def download_game():
+    try:
+        clear_screen()
+        print("Fetching the download link from the text file...")
+
+        url = "https://raw.githubusercontent.com/KRWCLASSIC/Time-Keeper-Archive/main/newest_release.txt"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            content = response.text
+
+            # Assuming the content is a valid URL
+            game_url = content.strip()
+
+            # Create the temp folder if it doesn't exist
+            temp_folder = "temp"
+            if not os.path.exists(temp_folder):
+                os.makedirs(temp_folder)
+
+            clear_screen()
+            print("Downloading the game...")
+
+            # Download the game to the temp folder
+            game_response = requests.get(game_url)
+            if game_response.status_code == 200:
+                game_path = os.path.normcase(os.path.join(temp_folder, "TimeKeeper.zip"))
+                with open(game_path, "wb") as game_file:
+                    game_file.write(game_response.content)
+                clear_screen()
+                print(f"Game downloaded successfully to '{game_path}'.")
+            else:
+                clear_screen()
+                print(f"Failed to download the game. Status code: {game_response.status_code}")
+        else:
+            print(f"Failed to fetch the URL. Status code: {response.status_code}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    finally:
+        waitfunc()
+
+def extract_game():
+    try:
+        clear_screen()
+        temp_folder = "temp"
+
+        # Check if the temp folder exists
+        if not os.path.exists(temp_folder):
+            print("Temp folder not found.")
+            waitfunc()
+            return
+
+        # List all game ZIP files in the temp folder
+        game_zips = [f for f in os.listdir(temp_folder) if f.endswith('.zip')]
+        
+        if not game_zips:
+            print("No game ZIP files found in the temp folder.")
+            waitfunc()
+            return
+
+        # Assuming there's only one game ZIP file, you may need to handle multiple ZIP files differently
+        game_zip = os.path.join(temp_folder, game_zips[0])
+
+        print(f"Extracting {game_zip} and entering the folder...")
+
+        # Extract the game using 7z.exe
+        subprocess.run(['utils\\7z', 'x', f'-o{temp_folder}', game_zip], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # List all folders in the temp folder
+        folders = [f for f in os.listdir(temp_folder) if os.path.isdir(os.path.join(temp_folder, f))]
+        
+        if len(folders) != 1:
+            raise ValueError("Expected one folder, but found multiple or none.")
+
+        # Enter the extracted folder
+        extracted_folder = os.path.join(temp_folder, folders[0])
+        os.chdir(extracted_folder)
+
+        # If all operations succeeded, call finish_download
+        finish_download()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+        # Remove the temp folder recursively
+        shutil.rmtree(temp_folder, ignore_errors=True)
+
+    finally:
+        waitfunc()
+        clear_screen()
+
+def finish_download():
+    try:
+        script_folder = os.path.dirname(os.path.abspath(__file__))
+        basegame_folder = os.path.join(script_folder, "basegame")
+        temp_folder = os.path.join(script_folder, "temp")
+
+        # Ensure the basegame folder exists
+        if not os.path.exists(basegame_folder):
+            os.makedirs(basegame_folder)
+
+        print("Moving game files to basegame folder...")
+
+        # List all folders in the temp folder
+        folders = [f for f in os.listdir(temp_folder) if os.path.isdir(os.path.join(temp_folder, f))]
+
+        if len(folders) == 1:
+            game_folder = os.path.join(temp_folder, folders[0])
+
+            # Move all files and subfolders from the game folder to the basegame folder
+            for item in os.listdir(game_folder):
+                item_path = os.path.join(game_folder, item)
+                destination_path = os.path.join(basegame_folder, item)
+
+                if os.path.isfile(item_path):
+                    shutil.move(item_path, destination_path)
+                elif os.path.isdir(item_path):
+                    shutil.move(item_path, destination_path)
+
+            print("Game files and folders moved successfully.")
+        elif len(folders) > 1:
+            raise ValueError("Expected one folder, but found multiple.")
+        else:
+            print("No folders found in the temp directory.")
+
+    except Exception as e:
+        print(f"An error occurred during the move operation: {e}")
+
 def print_center(text):
     terminal_width = os.get_terminal_size().columns
     lines = text.split('\n')
     for line in lines:
         print(line.center(terminal_width))
 
-ver = "0.0.2"  # Update the version number
+ver = "0.0.3"  # Update the version number
 
 init()
+clean_start()
 
 ascii_art = (
     " ▀▀█▀▀ ▀  █▀▄▀█ █▀▀  █    ▄▀▀▄ ▄▀▀▄ █▀▀▄ █▀▀ █▀▀▄ █▀█\n"
@@ -477,7 +610,6 @@ ascii_art = (
 )
 
 while True:
-    clean_start()
     clear_screen()
     print(Fore.LIGHTRED_EX)
     print_center(ascii_art)
@@ -514,4 +646,5 @@ while True:
         wait_for_timekeeper()
         live_debugger()
     elif option == '6':
-        pass
+        download_game()
+        extract_game()
