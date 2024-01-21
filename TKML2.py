@@ -561,9 +561,12 @@ def finish_download():
         basegame_folder = os.path.join(script_folder, "basegame")
         temp_folder = os.path.join(script_folder, "temp")
 
+        # Remove existing basegame folder if it exists
+        if os.path.exists(basegame_folder):
+            shutil.rmtree(basegame_folder)
+
         # Ensure the basegame folder exists
-        if not os.path.exists(basegame_folder):
-            os.makedirs(basegame_folder)
+        os.makedirs(basegame_folder)
 
         print("Moving game files to basegame folder...")
 
@@ -573,7 +576,7 @@ def finish_download():
         if len(folders) == 1:
             game_folder = os.path.join(temp_folder, folders[0])
 
-            # Move all files and subfolders from the game folder to the basegame folder
+            # Move all files and subfolders from the game folder to the new basegame folder
             for item in os.listdir(game_folder):
                 item_path = os.path.join(game_folder, item)
                 destination_path = os.path.join(basegame_folder, item)
@@ -591,6 +594,11 @@ def finish_download():
 
     except Exception as e:
         print(f"An error occurred during the move operation: {e}")
+
+    finally:
+        # Change working directory to the script's directory
+        os.chdir(script_folder)
+        waitfunc()
 
 def print_center(text):
     terminal_width = os.get_terminal_size().columns
