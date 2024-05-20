@@ -175,3 +175,17 @@ mod_name.zip/
     "replacement_line": "Line that will be in place of original one"
   }
   ```
+
+#### `rename`
+- **Description**: Renames a file or folder.
+- **Parameters**:
+  - `target`: Path to the file or folder to be renamed.
+  - `new_name`: The new name for the file or folder.
+- **Usage**:
+  ```json
+  {
+    "method": "rename",
+    "target": "/game/scripts/act1.rpy",
+    "new_name": "act2.rpy"
+  }
+  ```

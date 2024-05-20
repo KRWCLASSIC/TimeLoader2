@@ -252,6 +252,7 @@ def create_modded_instance():
 def apply_mods():
     temp_mods_directory = "temp_mods"
     modded_game_directory = os.path.join(os.getcwd(), "modded_game")
+    modded_game_directory = os.path.normpath(modded_game_directory)
 
     for mod_folder in os.listdir(temp_mods_directory):
         mod_folder_path = os.path.join(temp_mods_directory, mod_folder)
@@ -277,6 +278,25 @@ def apply_mods():
                                     print(f"File {file_path} in {mod_folder} replaced successfully.")
                                 else:
                                     print(f"Mod file {file_path} in {mod_folder} not found.")
+
+                            elif method == 'rename':
+                                target_prepath = mod_file.get('target')
+                                target = os.path.normpath(os.path.join(modded_game_directory, target_prepath[1:]))
+                                new_name = mod_file.get('new_name')
+
+                                reversed_target = target[::-1]
+                                index_of_first_slash = reversed_target.find(os.sep)
+                                if index_of_first_slash != -1:
+                                    nametarget_reversed = reversed_target[index_of_first_slash:]
+                                else:
+                                    nametarget_reversed = reversed_target
+                                nametarget = nametarget_reversed[::-1]
+
+                                if os.path.exists(target):
+                                    os.rename(target, os.path.join(nametarget, new_name))
+                                    print(f"File or folder {target_prepath} renamed to {new_name} successfully.")
+                                else:
+                                    print(f"Mod file or folder {target} not found.")
 
                             elif method == 'addline_bottom':
                                 lines_source = mod_file.get('lines_source')
@@ -369,6 +389,7 @@ def apply_mods():
                                                 print(f"Label {old_label_name} not found in {file_path}.")
                                 else:
                                     print(f"Label source file {label_source} not found for {mod_folder}.")
+
                             elif method == 'replace_line':
                                 file_path = mod_file.get('file')
                                 line_to_replace = mod_file.get('line')
